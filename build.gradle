@@ -37,6 +37,8 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.33'
 
 
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	
 
 

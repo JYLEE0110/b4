@@ -8,7 +8,22 @@
 </head>
 
 <body>
-    <h1>Register</h1>
+    <h1>RegistPage</h1>
+
+    <form class="actionForm" action="/product/register" method="POST">
+
+        <div>
+            <input type="text" name="pname" value="상품1">
+        </div>
+        <div>
+            <input type="number" name="price" value="12000">
+        </div>
+        <!-- Form tag안에있는 button은 submit => preventDefault -->
+        <div>
+            <button class="saveBtn">Register</button>
+        </div>
+        <br>
+    </form>
 
     <input class="uploadInput" type="file" name="upload" multiple>
     <button class="uploadBtn">UPLOAD</button>
@@ -43,6 +58,44 @@
         const uploadBtn = document.querySelector(".uploadBtn")
         const uploadInput = document.querySelector(".uploadInput")
         const uploadUL = document.querySelector(".uploadUL")
+
+        const saveBtn = document.querySelector(".saveBtn")
+
+        const actionForm = document.querySelector(".actionForm")
+
+        saveBtn.addEventListener("click", e => {
+
+            e.preventDefault()
+            e.stopPropagation()
+
+            const liArr = uploadUL.querySelectorAll("li")
+
+            // 업로드 파일이 없을때 => li태그 동적 생성으로 만들어지지 않을때
+            if(!liArr || liArr.length === 0){
+
+                alert("파일을 넣으세용")
+
+                return
+            }
+
+            // form hidden 태그 생성
+            let str = ""
+
+            for(let liObj of liArr){
+
+                console.log(liObj)
+                const uuid = liObj.getAttribute("data-uuid")
+                const fileName = liObj.getAttribute("data-filename")
+
+                console.log(uuid, fileName)
+                console.log("-------------------------------------")
+
+                //
+                str += `<input type='hidden' name='fileNames' value = '${uuid}_${fileName}'>`
+            }
+            actionForm.innerHTML += str
+
+        }, false)
 
         uploadBtn.addEventListener("click", e => {
 
@@ -86,7 +139,7 @@
             for (const uploadFile of arr) {
                 const { fileName, link, uuid } = uploadFile
 
-                str += `<li>
+                str += `<li data-uuid ='${uuid}' data-fileName='${fileName}'>
                          <div>
                             <a href ='http://localhost/${uuid}_${fileName}' target="_blank">
                                 <img src = 'http://localhost/${link}'/>
@@ -127,7 +180,7 @@
 
             console.log("AAAA")
 
-            return '';
+            return 'Are you suer';
         }
 
     </script>
