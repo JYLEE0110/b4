@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Product modify</h1>
+    
     <!-- 상품 데이터 출력 -->
     <!--  -->
     <!-- axios로 이미지 불러와서 출력 -->
@@ -22,14 +23,44 @@
         </p>
     </form>
 
+    <!-- 파일 업로드 부분 -->
+    <input class="uploadInput" type="file" name="upload" multiple>
+    <button class="uploadBtn">UPLOAD</button>
+
+    <!-- 이미지 출력 부분 -->
+    <div class="uploadDiv">
+        <ul class="uploadUL">
+
+        </ul>
+    </div>
+
+    <style>
+        .uploadUL {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .uploadUL li {
+            margin: 1em;
+            background-color: darkgrey;
+            padding: 1em;
+            border: 1px solid darkgrey;
+            border-radius: 0.2em;
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:inline="javascript">
         // step2.5
         // 등록과정과 유사 - 첨부파일 수정 / 상품데이터 수정
         // post방식으로 submit -> 등록과 동일
 
-        // pno 값 가져오기
+        // 태그 가져오기
         const pno = [[${dto.pno}]]
+        const uploadUL = document.querySelector(".uploadUL")
+        const uploadBtn = document.querySelector(".uploadBtn")
+        const uploadInput = document.querySelector(".uploadInput")
 
         // 이미지 axios 통신
         const loadImages = () => {
@@ -37,8 +68,94 @@
             .then(res => {
                 const arr = res.data
                 console.log(arr)
+
+                // 파일의 이름을 uuid, fileName, link 형식의 map으로 만든 코드 
+                const objArr = arr.map(str => {
+                    const uuid = str.substring(0, 36)
+                    const fileName = str.substring(37)
+                    const link = 's_'+str
+                    return {uuid, fileName, link} //{uuid: uuid, fileName: fileName} 
+
+                })
+
+                // 그걸 대입
+                showProducts(objArr)
             })
         }
+
+        // 이미지 태그를 찍어내는 함수
+        const showProducts = (arr) => {
+            let str = ""
+
+            // 업로드한 여러개의 파일을 루프로 html 만드는 코드
+            for (const uploadFile of arr) {
+                const { fileName, link, uuid } = uploadFile
+
+                str += `<li data-uuid ='${uuid}' data-fileName='${fileName}'>
+                        <div>
+                            <a href ='http://localhost/${uuid}_${fileName}' target="_blank">
+                                <img src = 'http://localhost/${link}'/>
+                            </a>
+                            <p>${fileName}<button onclick ="javascript:removeFile(event, '${uuid}', '${fileName}')">X</button></p>
+                        </div>
+                        </li>`
+
+            }
+
+            // 한번에가 아니라 하나하나 넣을 수 도 있어서 +=로 쓴다.
+            uploadUL.innerHTML += str
+        }
+
+        // 파일 삭제
+        const removeFile = (e, uuid, fileName) => {
+
+            // 이벤트 전파가안되게 
+            e.stopPropagation()
+            e.preventDefault()
+
+            alert("remove file")
+
+            const liObj = e.target.closest("li")
+
+            console.log(liObj)
+
+            axios.delete(`http://localhost:8080/removeFile/${uuid}_${fileName}`)
+            liObj.remove()
+        }
+
+        uploadBtn.addEventListener("click", e => {
+
+            e.preventDefault()
+            e.stopPropagation()
+
+            console.dir(uploadInput.files);
+
+            if (!uploadInput.files || uploadInput.files.length === 0) {
+
+                return
+
+            }
+
+            const formData = new FormData()
+
+            for (let i = 0; i < uploadInput.files.length; i++) {
+
+                formData.append("files", uploadInput.files[i])
+
+            }
+
+            console.dir(formData)
+
+            const header = { headers: { "Content-Type": "multipart/form-data" } }
+
+            axios.post('http://localhost:8080/upload', formData, header)
+                .then(res => {
+                    const result = res.data
+                    console.log(result)
+                    showProducts(result)
+                })
+
+        }, false)
 
         loadImages()
 

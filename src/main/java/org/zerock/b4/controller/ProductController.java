@@ -70,7 +70,7 @@ public class ProductController {
     // list 
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model){
-
+        
         log.info("GET | /product/list");
 
         model.addAttribute("res", productService.list(pageRequestDTO));

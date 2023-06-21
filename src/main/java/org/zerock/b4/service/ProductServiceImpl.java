@@ -80,5 +80,5 @@ public class ProductServiceImpl implements ProductService {
     public List<String> getImage(Integer pno) {
         return productMapper.selectImages(pno);
     }
-    
+
 }

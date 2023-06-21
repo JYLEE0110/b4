@@ -169,11 +169,8 @@
 
             console.log(liObj)
 
-
             axios.delete(`http://localhost:8080/removeFile/${uuid}_${fileName}`)
-
             liObj.remove()
-
         }
 
         // window.onbeforeunload = function () {
