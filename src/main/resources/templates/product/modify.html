@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Product modify</h1>
+    <!-- 상품 데이터 출력 -->
+    <!--  -->
+    <!-- axios로 이미지 불러와서 출력 -->
+    <!-- Ajax로 호출할 URL 기능 개발 필요 -->
+
+    <!-- 전송용 form -> /modifty -->
+    <form>
+        <p>
+            <input type="text" name="pno" th:value="${dto.pno}">
+        </p>
+        <p>
+            <input type="text" name="pname" th:value="${dto.pname}">
+        </p>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:inline="javascript">
+        // step2.5
+        // 등록과정과 유사 - 첨부파일 수정 / 상품데이터 수정
+        // post방식으로 submit -> 등록과 동일
+
+        // pno 값 가져오기
+        const pno = [[${dto.pno}]]
+
+        // 이미지 axios 통신
+        const loadImages = () => {
+            axios.get(`http://localhost:8080/product/images/${pno}`)
+            .then(res => {
+                const arr = res.data
+                console.log(arr)
+            })
+        }
+
+        loadImages()
+
+
+
+    </script>
+
+</body>
+</html>

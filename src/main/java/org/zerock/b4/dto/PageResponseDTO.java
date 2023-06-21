@@ -2,7 +2,6 @@ package org.zerock.b4.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 

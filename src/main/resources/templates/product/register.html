@@ -94,6 +94,7 @@
                 str += `<input type='hidden' name='fileNames' value = '${uuid}_${fileName}'>`
             }
             actionForm.innerHTML += str
+            actionForm.submit()
 
         }, false)
 
@@ -175,13 +176,13 @@
 
         }
 
-        window.onbeforeunload = function () {
+        // window.onbeforeunload = function () {
 
 
-            console.log("AAAA")
+        //     console.log("AAAA")
 
-            return 'Are you suer';
-        }
+        //     return 'Are you suer';
+        // }
 
     </script>
 
