@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +26,9 @@
             <button class="modBtn">Modify</button>
             <button>Delete</button>
         </p>
+        <div class ="uploadHidden">
+
+        </div>
     </form>
 
     <!-- 파일 업로드 부분 -->
@@ -69,6 +72,7 @@
 
         const modBtn = document.querySelector(".modBtn")
         const actionForm = document.querySelector(".actionForm")
+        const uploadHidden = document.querySelector(".uploadHidden")
 
 
         // 클릭시 hidden 만들고 전송
@@ -102,7 +106,7 @@
                 //
                 str += `<input type='hidden' name='fileNames' value = '${uuid}_${fileName}'>`
             }
-            actionForm.innerHTML += str
+            uploadHidden.innerHTML += str
             actionForm.submit()
 
         }, false)
