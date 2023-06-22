@@ -29,9 +29,8 @@ public class ProductServiceImpl implements ProductService {
         
         List<String> fileNames = dto.getFileNames();
 
-        int count = productMapper.insertProduct(dto);
+        productMapper.insertProduct(dto);
 
-        log.info("insert product count: " + count);
 
         Integer pno = dto.getPno();
 
@@ -49,9 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
         log.info(list);
 
-        int countImages = productMapper.insertImages(list);
-
-        log.info("=====================" + countImages);
+       productMapper.insertImages(list);
 
         return pno;
     }
@@ -79,6 +76,41 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<String> getImage(Integer pno) {
         return productMapper.selectImages(pno);
+    }
+
+    // 상품 수정 
+    @Override
+    public void modify(ProductDTO dto) {
+
+        // 상품 수정 후 
+        productMapper.updateOne(dto);
+        // 기존 이미지를 삭제하고 
+        productMapper.deleteimges(dto.getPno());
+
+        // 신규 이미지를 추가해야한다 
+        List<String> fileNames = dto.getFileNames();
+        
+        Integer pno = dto.getPno();
+
+        log.info("-----------------------------" + pno);
+
+        AtomicInteger index = new AtomicInteger();
+
+        List<Map<String, String>> list = fileNames.stream().map(str -> {
+            String uuid = str.substring(0, 36);
+            String fileName = str.substring(37);
+
+            return Map.of("uuid", uuid, "fileName", fileName, "pno", "" + pno, "ord", "" + index.getAndIncrement());
+
+        }).collect(Collectors.toList());
+
+        log.info(list);
+
+        // list 를 배열 객체로 넣어준다 
+        int countImages = productMapper.insertImages(list);
+
+        log.info(countImages);
+
     }
 
 }

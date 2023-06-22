@@ -17,9 +17,6 @@ public interface ProductService {
 
     // 부모 인터페이스로 빼서 상속
     PageResponseDTO<ProductListDTO> list(PageRequestDTO pageRequestDTO);
-
-    // 수정 / 삭제는 기본 void
-    // void modify(//DTO)
     
     // 상품 조회 
     ProductDTO get(Integer pno);
@@ -32,6 +29,11 @@ public interface ProductService {
     // 기존 첨부파일 DB 삭제
     // DTO에 있는 첨부파일 DB 추가
 
+    // 상품 수정 
+    void modify(ProductDTO productDTO);
+
+    // 삭제 후 수정 을 위한 삭제 메소드 정의 
+    
 
 
 }

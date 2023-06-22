@@ -52,18 +52,20 @@ public class ProductController {
     @GetMapping("/images/{pno}")
     @ResponseBody   // responseBody 로 json 데이터 넘겨준다  restController 가 아닐때 json 방식으로 변환하려면 @ResponseBody 를 써야함 
     public List<String> getImages(@PathVariable("pno") Integer pno) {
+
         return productService.getImage(pno);
     }
 
     //step3 post로 상품 수정
     @PostMapping("/modify/{pno}")
-    public String modifyPost(
-        // DTO를 확인 -> 등록과정과 동일한 내용 pno 존재
-        // DTO를 개발
-        // 
-    ){
+    public String modifyPost(@PathVariable("pno") Integer pno, ProductDTO dto){
+        // pno 의 값을 일치시켜야 하기 때문에 강제적으로 dto.setPno(pno) 로 절대! 강제 세팅 ! : 권성준
+        dto.setPno(pno);
+        // 서비스 호출 값 전달 
+        productService.modify(dto);
 
-        return null;
+        // read page 로 리다이렉트를 보내야 하기때문에 pno 값을 실어서 보내준다
+        return "redirect:/product/read/" + pno;
     }
 
 

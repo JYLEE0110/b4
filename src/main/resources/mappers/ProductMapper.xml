@@ -35,5 +35,7 @@
         </foreach>
 
     </insert>
+    
+    <!-- 상품 이미지 삭제 -->
 
 </mapper>
